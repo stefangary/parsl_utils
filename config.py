@@ -173,7 +173,7 @@ for label in resource_labels:
             working_dir =  resource_inputs['resource']['jobdir'],
             cores_per_worker = cores_per_worker,
             worker_logdir_root = worker_logdir_root,
-            address = resource_inputs['resource']['privateIp'],
+            address = resource_inputs['resource']['publicIp'].split('@')[1],
             provider = provider,
             storage_access = storage_access
         )
@@ -195,7 +195,7 @@ if len(executors) > 1:
     )
 else:
     from parsl.monitoring.monitoring import MonitoringHub
-    executor_address = resource_inputs['resource']['privateIp']
+    executor_address = resource_inputs['resource']['publicIp'].split('@')[1]
     config = Config(
         retries = retries,
         retry_handler = retry_handler,
