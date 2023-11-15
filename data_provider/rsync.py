@@ -5,7 +5,12 @@ from . import pwstaging
 
 def get_stage_in_cmd(file, jumphost = None):
     if jumphost:
-        cmd = "rsync -avzq  -e 'ssh -J {jumphost}' {hostname}:{permanent_filepath} {worker_filepath}".format(
+        # Prefix rsync command with ssh to setup multiplex.
+        # Executing two commands separated by ; with command substitution
+        # does not normally work in bash, but works for
+        # the special case we use subprocess.run(cmd, shell=True)
+        # in the wrapper.
+        cmd = "ssh -J {jumphost} {hostname} exit; rsync -avzq  -e 'ssh -J {jumphost}' {hostname}:{permanent_filepath} {worker_filepath}".format(
             jumphost = jumphost,
             hostname = file.netloc,
             permanent_filepath = file.path,
@@ -21,7 +26,12 @@ def get_stage_in_cmd(file, jumphost = None):
 
 def get_stage_out_cmd(file, jumphost = None):
     if jumphost:
-        cmd = "rsync -avzq -e 'ssh -J {jumphost}' --rsync-path=\"mkdir -p {root_path} && rsync\" {worker_filepath} {hostname}:{permanent_filepath}".format(
+        # Prefix rsync command with ssh to setup multiplex.
+        # Executing two commands separated by ; with command substitution
+        # does not normally work in bash, but works for
+        # the special case we use subprocess.run(cmd, shell=True)
+        # in the wrapper.
+        cmd = "ssh -J {jumphost} {hostname} exit; rsync -avzq -e 'ssh -J {jumphost}' --rsync-path=\"mkdir -p {root_path} && rsync\" {worker_filepath} {hostname}:{permanent_filepath}".format(
             jumphost = jumphost,
             hostname = file.netloc,
             permanent_filepath = file.path,
