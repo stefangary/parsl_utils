@@ -11,7 +11,7 @@ def get_stage_in_cmd(file, jumphost = None):
         # the special case we use subprocess.run(cmd, shell=True)
         # in the wrapper.
         #cmd = "ssh -J {jumphost} {hostname} exit; rsync -avzq  -e 'ssh -J {jumphost}' {hostname}:{permanent_filepath} {worker_filepath}".format(
-        cmd = "rsync -avzq -e 'ssh -J {jumphost}' {hostname}:{permanent_filepath} {worker_filepath}".format(
+        cmd = "rsync -avzq --timeout=60 -e 'ssh -J {jumphost}' {hostname}:{permanent_filepath} {worker_filepath}".format(
             jumphost = jumphost,
             hostname = file.netloc,
             permanent_filepath = file.path,
@@ -33,7 +33,7 @@ def get_stage_out_cmd(file, jumphost = None):
         # the special case we use subprocess.run(cmd, shell=True)
         # in the wrapper.
         #cmd = "ssh -J {jumphost} {hostname} exit; rsync -avzq -e 'ssh -J {jumphost}' --rsync-path=\"mkdir -p {root_path} && rsync\" {worker_filepath} {hostname}:{permanent_filepath}".format(
-        cmd = "rsync -avzq -e 'ssh -J {jumphost}' --rsync-path=\"mkdir -p {root_path} && rsync\" {worker_filepath} {hostname}:{permanent_filepath}".format(
+        cmd = "rsync -avzq --timeout=60 -e 'ssh -J {jumphost}' --rsync-path=\"mkdir -p {root_path} && rsync\" {worker_filepath} {hostname}:{permanent_filepath}".format(
             jumphost = jumphost,
             hostname = file.netloc,
             permanent_filepath = file.path,
