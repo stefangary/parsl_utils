@@ -90,6 +90,7 @@ for label in resource_labels:
     # localhost and local port to which
     # cluster login node 22 is forwarded.
     ssh_jump_config = os.path.join('/tmp/.ssh/', resource_inputs['resource']['name'], '.config')
+    print('Checking for presence of jump box with '+ssh_jump_config+' ...')
     if os.path.isfile(ssh_jump_config):
         # There is a jump box. Get localport.
         file = open(ssh_jump_config, 'r')
