@@ -8,6 +8,7 @@ from parsl.addresses import address_by_hostname
 
 import os
 import json
+import subprocess
 
 import parsl_utils
 from parsl_utils.data_provider.rsync import PWRSyncStaging
@@ -102,6 +103,12 @@ for label in resource_labels:
 	    # Adjust Parsl config
         channel.hostname = "localhost"
         channel.port = localport
+
+        # Remove any hostkey associated with
+        # this particular port in known_hosts
+        command = f"ssh-keygen -R [localhost]:{localport}"
+        print('Checking for port reuse; running: '+command)
+        subprocess.run(command, check=True, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Define worker init:
     # - export PYTHONPATH={run_dir} is needed to use custom staging providers
