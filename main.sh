@@ -12,6 +12,7 @@ if [ -z "${workflow_utils_branch}" ]; then
     git clone https://github.com/parallelworks/workflow-utils.git
 else
     # If not empty, clone the specified branch
+    echo "Requesting workflow-utils branch: $workflow_utils_branch"
     git clone -b "$workflow_utils_branch" https://github.com/parallelworks/workflow-utils.git
 fi
 
